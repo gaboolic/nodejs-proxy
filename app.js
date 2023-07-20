@@ -17,7 +17,7 @@ const log = (/** @type {string} */ info, /** @type {string | undefined} */ event
 wss.on('connection', (ws) => {
     console.log("ws connection")
     // 在每个连接上设置消息处理逻辑
-    ws.on('message', (chunk) => {
+    ws.once('message', (chunk) => {
         console.log("on message")
         let webSocket = ws;
         let remoteSocketWapper = {
@@ -98,9 +98,9 @@ async function handleTCPOutBound(remoteSocket, addressRemote, portRemote, rawCli
         });
 
         remoteSocket.value = tcpSocket;
-        log(`connected to ${address}:${port}`);
+        log(`handleTCPOutBound connected to ${address}:${port}`);
         // const writer = tcpSocket.writable.getWriter();
-        // console.log("rawClientData:"+rawClientData)
+        console.log("rawClientData:"+rawClientData)
         tcpSocket.write(rawClientData); // first write, nomal is tls client hello
         // writer.releaseLock();
         return tcpSocket;
@@ -108,6 +108,7 @@ async function handleTCPOutBound(remoteSocket, addressRemote, portRemote, rawCli
 
     // if the cf connect tcp socket have no incoming data, we retry to redirect ip
     async function retry() {
+        console.log("retry")
         const tcpSocket = await connectAndWrite(proxyIP || addressRemote, portRemote)
         // no matter retry success or not, close websocket
         tcpSocket.closed.catch(error => {
