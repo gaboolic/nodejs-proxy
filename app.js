@@ -1,5 +1,6 @@
 const net=require('net');
 const {WebSocket,createWebSocketStream}=require('ws');
+const { TextDecoder } = require('util');
 const logcb= (...args)=>console.log.bind(this,...args);
 const errcb= (...args)=>console.error.bind(this,...args);
 
